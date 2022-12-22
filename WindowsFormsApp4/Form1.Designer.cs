@@ -29,12 +29,16 @@ namespace WindowsFormsApp4
 		/// </summary>
 		private void InitializeComponent()
 		{
+            this.components = new System.ComponentModel.Container();
             this.lblRegion = new System.Windows.Forms.Label();
             this.txtbxRegion = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.dgvBranch = new System.Windows.Forms.DataGridView();
             this.lblBranch = new System.Windows.Forms.Label();
+            this.branchBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBranch)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.branchBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // lblRegion
@@ -68,8 +72,12 @@ namespace WindowsFormsApp4
             // 
             // dgvBranch
             // 
+            this.dgvBranch.AutoGenerateColumns = false;
             this.dgvBranch.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvBranch.Location = new System.Drawing.Point(486, 78);
+            this.dgvBranch.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.nameDataGridViewTextBoxColumn});
+            this.dgvBranch.DataSource = this.branchBindingSource;
+            this.dgvBranch.Location = new System.Drawing.Point(486, 69);
             this.dgvBranch.Name = "dgvBranch";
             this.dgvBranch.RowHeadersWidth = 51;
             this.dgvBranch.RowTemplate.Height = 24;
@@ -86,6 +94,18 @@ namespace WindowsFormsApp4
             this.lblBranch.TabIndex = 4;
             this.lblBranch.Text = "Branch";
             // 
+            // branchBindingSource
+            // 
+            this.branchBindingSource.DataSource = typeof(WindowsFormsApp4.Branch);
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
+            this.nameDataGridViewTextBoxColumn.MinimumWidth = 6;
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            this.nameDataGridViewTextBoxColumn.Width = 125;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -99,6 +119,7 @@ namespace WindowsFormsApp4
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dgvBranch)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.branchBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -111,6 +132,8 @@ namespace WindowsFormsApp4
 		private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView dgvBranch;
         private System.Windows.Forms.Label lblBranch;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.BindingSource branchBindingSource;
     }
 }
 
