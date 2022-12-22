@@ -49,23 +49,18 @@ namespace WindowsFormsApp4
 
             region_m = new Region();
             branch_m = new Branch();
-            populateDataGridView();
+           
 
         }
 
         private void populateDataGridView()
         {
-            //  dgvBranch.AutoGenerateColumns = false;
-            //  dgvBranch.AllowUserToAddRows = false;
-            BindingSource bs = new BindingSource();
-            bs.DataSource = typeof(Branch);
-
-
-            bs.Add(region_m.Branches);
-
-
-            dgvBranch.DataSource = bs;
-            dgvBranch.AutoGenerateColumns = true;
+            
+            dgvBranch.AutoGenerateColumns = false;
+            dgvBranch.AllowUserToAddRows = false;
+            //dgvBranch.Refresh();
+            //dgvBranch.DataSource = null;
+            dgvBranch.DataSource = region_m.Branches;
         }
 
         private void getBranchData(int regionID)
@@ -117,8 +112,11 @@ namespace WindowsFormsApp4
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
+            region_m = new Region();
+            branch_m = new Branch();
+
             var tempRegionName = txtbxRegion.Text.ToString();//Save user input
-            var tempRegionID = getRegionID(tempRegionName);
+			var tempRegionID = getRegionID(tempRegionName);
             region_m.Id = tempRegionID;
             region_m.Name = tempRegionName;
             getBranchData(region_m.Id);
