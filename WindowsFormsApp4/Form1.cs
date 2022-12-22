@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,11 @@ namespace WindowsFormsApp4
 		string _ConnectionString;
         Region region_m;
         Branch branch_m;
+
+        SqlConnection sqlCon;
+        SqlDataReader sqlData;
+
+
         public Form1()
 		{
 			InitializeComponent();
@@ -45,59 +51,53 @@ namespace WindowsFormsApp4
 			 * Write appropriate WinForms code to get that data on screen.
 			 *
 			 * Email steve@ontempo.co.nz with questions!
-			*/
-
-            region_m = new Region();
-            branch_m = new Branch();
-           
-
+			*/          
         }
 
         private void populateDataGridView()
-        {
-            
+        {    
             dgvBranch.AutoGenerateColumns = false;
             dgvBranch.AllowUserToAddRows = false;
-            //dgvBranch.Refresh();
-            //dgvBranch.DataSource = null;
             dgvBranch.DataSource = region_m.Branches;
         }
 
-        private void getBranchData(int regionID)
+        private SqlCommand setSqlSQLQuery(string query, string parameterName, string  parameterValue)
         {
-            SqlConnection conn1 = new SqlConnection(_ConnectionString);
-            conn1.Open();
-            SqlCommand cmd1 = new SqlCommand("select id,  [Name] from Branch where RegionId =  @RegionID", conn1);
-            cmd1.Parameters.Clear();
-            cmd1.Parameters.AddWithValue("RegionID", regionID.ToString());
-            SqlDataReader reader1;
-            reader1 = cmd1.ExecuteReader();
+            sqlCon = new SqlConnection(_ConnectionString);
+            sqlCon.Open();
+            SqlCommand sqlcmd  = new SqlCommand(query,sqlCon);
+            sqlcmd.Parameters.Clear();
+            sqlcmd.Parameters.AddWithValue(parameterName, parameterValue);
+            return sqlcmd;
 
-            while (reader1.Read())
+        }
+
+        private void getBranchData(int regionID)
+        {     
+            SqlCommand sqlcmd = setSqlSQLQuery("select id,  [Name] from Branch where RegionId =  @RegionID", "RegionID", regionID.ToString());               
+            sqlData = sqlcmd.ExecuteReader();
+
+            while (sqlData.Read())
             {
                 Branch branchItem = new Branch();
-                Int32 tempRegionId = reader1.GetInt32(0);
+                Int32 tempRegionId = sqlData.GetInt32(0);
                 branchItem.Id = System.Int32.Parse(tempRegionId.ToString());
-                branchItem.Name = reader1["Name"].ToString();
+                branchItem.Name = sqlData["Name"].ToString();
                 region_m.Branches.Add(branchItem);
             }
 
-            //Now let us store our value in our region class		
-            reader1.Close();
-            conn1.Close();
+            sqlData.Close();
+            sqlCon.Close();
         }
 
-        private int getRegionID(string regionName)
+
+        private int getRegionID()
         {
             Int32 regionID_2;
             int regionID = 0;
-            SqlConnection sclCon = new SqlConnection(_ConnectionString);
-            sclCon.Open();
-            SqlCommand sqlcmd = new SqlCommand("Select Id from [dbo].[Region] where [Name] = @RegionName", sclCon);
-            sqlcmd.Parameters.AddWithValue("RegionName", regionName);
-            SqlDataReader sqlData;
+           
+            SqlCommand sqlcmd = setSqlSQLQuery("Select Id from [dbo].[Region] where [Name] = @RegionName", "RegionName", region_m.Name);
             sqlData = sqlcmd.ExecuteReader();
-            List<string> branch = new List<string>();
 
             while (sqlData.Read())
             {
@@ -106,7 +106,7 @@ namespace WindowsFormsApp4
             }
 
             sqlData.Close();
-            sclCon.Close();
+            sqlCon.Close();
             return regionID;//return value
         }
 
@@ -115,10 +115,9 @@ namespace WindowsFormsApp4
             region_m = new Region();
             branch_m = new Branch();
 
-            var tempRegionName = txtbxRegion.Text.ToString();//Save user input
-			var tempRegionID = getRegionID(tempRegionName);
-            region_m.Id = tempRegionID;
-            region_m.Name = tempRegionName;
+            region_m.Name = txtbxRegion.Text.ToString();//Save user input
+			region_m.Id = getRegionID();
+          
             getBranchData(region_m.Id);
             populateDataGridView();
         }
