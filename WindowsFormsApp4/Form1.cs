@@ -49,7 +49,7 @@ namespace WindowsFormsApp4
 
             region_m = new Region();
             branch_m = new Branch();
-
+            populateDataGridView();
         }
 
 		private void button1_Click(object sender, EventArgs e)
@@ -60,10 +60,16 @@ namespace WindowsFormsApp4
             region_m.Name = tempRegionName;
             getBranchData(region_m.Id);
 
-
         }
 
-		private void getBranchData(int regionID)
+        private void populateDataGridView()
+        {
+            dgvBranch.AutoGenerateColumns = false;
+            dgvBranch.AllowUserToAddRows = false;
+            dgvBranch.DataSource = region_m.Branches; 
+        }
+
+            private void getBranchData(int regionID)
 		{
             SqlConnection conn1 = new SqlConnection(_ConnectionString);
             conn1.Open();
