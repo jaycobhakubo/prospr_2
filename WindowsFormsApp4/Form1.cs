@@ -56,9 +56,36 @@ namespace WindowsFormsApp4
 		{
 			var tempRegionName = txtbxRegion.Text.ToString();//Save user input
 			var tempRegionID = getRegionID(tempRegionName);
+            region_m.Id = tempRegionID;
+            region_m.Name = tempRegionName;
+            getBranchData(region_m.Id);
 
 
-		}
+        }
+
+		private void getBranchData(int regionID)
+		{
+            SqlConnection conn1 = new SqlConnection(_ConnectionString);
+            conn1.Open();
+            SqlCommand cmd1 = new SqlCommand("select id,  [Name] from Branch where RegionId =  @RegionID", conn1);
+            cmd1.Parameters.Clear();
+            cmd1.Parameters.AddWithValue("RegionID", regionID.ToString());
+            SqlDataReader reader1;
+            reader1 = cmd1.ExecuteReader();
+
+            while (reader1.Read())
+            {
+                Branch branchItem = new Branch();
+                Int32 tempRegionId = reader1.GetInt32(0);
+                branchItem.Id = System.Int32.Parse(tempRegionId.ToString());
+                branchItem.Name = reader1["Name"].ToString();
+                region_m.Branches.Add(branchItem);
+            }
+
+            //Now let us store our value in our region class		
+            reader1.Close();
+            conn1.Close();
+        }
 
 		private int getRegionID(string regionName)
 		{
