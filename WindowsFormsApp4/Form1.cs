@@ -15,13 +15,15 @@ namespace WindowsFormsApp4
 	public partial class Form1 : Form
 	{
 		string _ConnectionString;
+		Region region_m;
+		Branch branch_m;
 		public Form1()
 		{
 			InitializeComponent();
 
 			_ConnectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={Application.StartupPath}\Database1.mdf;Integrated Security=True";
 
-			/* What you need to do:
+            /* What you need to do:
 			 * Design and develop a small application where the user enters the name of a geographical region 
 			 *  into a text box, and clicks Load. (Assume the user will only enter these valid region names: Auckland and Hamilton.)
 			 *  The names of all the retail branches belonging to that region will be displayed in a grid.
@@ -45,6 +47,9 @@ namespace WindowsFormsApp4
 			 * Email steve@ontempo.co.nz with questions!
 			*/
 
-		}
+            region_m = new Region();
+            branch_m = new Branch();
+
+        }
 	}
 }
