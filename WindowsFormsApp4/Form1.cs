@@ -17,7 +17,7 @@ namespace WindowsFormsApp4
 	{
 		string _ConnectionString;
         Region region_m;
-        Branch branch_m;
+       // Branch branch_m;
 
         SqlConnection sqlCon;
         SqlDataReader sqlData;
@@ -69,7 +69,6 @@ namespace WindowsFormsApp4
             sqlcmd.Parameters.Clear();
             sqlcmd.Parameters.AddWithValue(parameterName, parameterValue);
             return sqlcmd;
-
         }
 
         private void getBranchData(int regionID)
@@ -113,7 +112,7 @@ namespace WindowsFormsApp4
         private void btnLoad_Click(object sender, EventArgs e)
         {
             region_m = new Region();
-            branch_m = new Branch();
+            //branch_m = new Branch();
 
             region_m.Name = txtbxRegion.Text.ToString();//Save user input
 			region_m.Id = getRegionID();
