@@ -15,15 +15,13 @@ namespace WindowsFormsApp4
 	public partial class Form1 : Form
 	{
 		string _ConnectionString;
-		Region region_m;
-		Branch branch_m;
 		public Form1()
 		{
 			InitializeComponent();
 
 			_ConnectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={Application.StartupPath}\Database1.mdf;Integrated Security=True";
 
-            /* What you need to do:
+			/* What you need to do:
 			 * Design and develop a small application where the user enters the name of a geographical region 
 			 *  into a text box, and clicks Load. (Assume the user will only enter these valid region names: Auckland and Hamilton.)
 			 *  The names of all the retail branches belonging to that region will be displayed in a grid.
@@ -47,73 +45,6 @@ namespace WindowsFormsApp4
 			 * Email steve@ontempo.co.nz with questions!
 			*/
 
-            region_m = new Region();
-            branch_m = new Branch();
-            populateDataGridView();
-        }
-
-		private void button1_Click(object sender, EventArgs e)
-		{
-			var tempRegionName = txtbxRegion.Text.ToString();//Save user input
-			var tempRegionID = getRegionID(tempRegionName);
-            region_m.Id = tempRegionID;
-            region_m.Name = tempRegionName;
-            getBranchData(region_m.Id);
-
-        }
-
-        private void populateDataGridView()
-        {
-            dgvBranch.AutoGenerateColumns = false;
-            dgvBranch.AllowUserToAddRows = false;
-            dgvBranch.DataSource = region_m.Branches; 
-        }
-
-            private void getBranchData(int regionID)
-		{
-            SqlConnection conn1 = new SqlConnection(_ConnectionString);
-            conn1.Open();
-            SqlCommand cmd1 = new SqlCommand("select id,  [Name] from Branch where RegionId =  @RegionID", conn1);
-            cmd1.Parameters.Clear();
-            cmd1.Parameters.AddWithValue("RegionID", regionID.ToString());
-            SqlDataReader reader1;
-            reader1 = cmd1.ExecuteReader();
-
-            while (reader1.Read())
-            {
-                Branch branchItem = new Branch();
-                Int32 tempRegionId = reader1.GetInt32(0);
-                branchItem.Id = System.Int32.Parse(tempRegionId.ToString());
-                branchItem.Name = reader1["Name"].ToString();
-                region_m.Branches.Add(branchItem);
-            }
-
-            //Now let us store our value in our region class		
-            reader1.Close();
-            conn1.Close();
-        }
-
-		private int getRegionID(string regionName)
-		{
-            Int32 regionID_2;
-            int regionID = 0;
-            SqlConnection sclCon = new SqlConnection(_ConnectionString);
-            sclCon.Open();
-            SqlCommand sqlcmd = new SqlCommand("Select Id from [dbo].[Region] where [Name] = @RegionName", sclCon);
-            sqlcmd.Parameters.AddWithValue("RegionName", regionName);
-            SqlDataReader sqlData;
-            sqlData = sqlcmd.ExecuteReader();
-            List<string> branch = new List<string>();
-
-            while (sqlData.Read())
-            {
-                regionID_2 = sqlData.GetInt32 (0);//The data coming from db is int32
-                regionID = System.Int32.Parse(regionID_2.ToString());
-            }
-
-            sqlData.Close();
-            sclCon.Close();
-            return regionID;//return value
-        }
+		}
 	}
 }
