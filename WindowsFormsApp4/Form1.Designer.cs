@@ -58,12 +58,13 @@ namespace WindowsFormsApp4
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Rockwell", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(308, 283);
+            this.button1.Location = new System.Drawing.Point(308, 300);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(143, 51);
             this.button1.TabIndex = 2;
             this.button1.Text = "Load";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // dgvBranch
             // 

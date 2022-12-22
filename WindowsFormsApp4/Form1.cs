@@ -51,5 +51,36 @@ namespace WindowsFormsApp4
             branch_m = new Branch();
 
         }
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			var tempRegionName = txtbxRegion.Text.ToString();//Save user input
+			var tempRegionID = getRegionID(tempRegionName);
+
+
+		}
+
+		private int getRegionID(string regionName)
+		{
+            Int32 regionID_2;
+            int regionID = 0;
+            SqlConnection sclCon = new SqlConnection(_ConnectionString);
+            sclCon.Open();
+            SqlCommand sqlcmd = new SqlCommand("Select Id from [dbo].[Region] where [Name] = @RegionName", sclCon);
+            sqlcmd.Parameters.AddWithValue("RegionName", regionName);
+            SqlDataReader sqlData;
+            sqlData = sqlcmd.ExecuteReader();
+            List<string> branch = new List<string>();
+
+            while (sqlData.Read())
+            {
+                regionID_2 = sqlData.GetInt32 (0);//The data coming from db is int32
+                regionID = System.Int32.Parse(regionID_2.ToString());
+            }
+
+            sqlData.Close();
+            sclCon.Close();
+            return regionID;//return value
+        }
 	}
 }
